@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <cstdlib>
+#include <ctime>
 
 // Define a struct to hold drug information
 struct DrugInfo {
@@ -141,17 +143,126 @@ public:
             std::cout << "Drug with code " << code << " not found." << std::endl;
         }
     }
+
+    int getDrugPrice(const std::string& code) {
+        if (DrugsInfo.find(code) != DrugsInfo.end()) {
+            int minPrice = DrugsInfo[code].PriceRange.first;
+            int maxPrice = DrugsInfo[code].PriceRange.second;
+            // Generate a random price within the range
+            return rand() % (maxPrice - minPrice + 1) + minPrice;
+        }
+        return -1; // Indicate error
+    }
+};
+
+// Define a struct to hold city information
+struct CityInfo {
+    std::string Name;
+    std::string FullName; // This seems to be missing in the constructor
+    int MaxDrugCount = 10;
+    std::vector<std::string> HomeDrugNames;
+    std::string GunShopName;
+    std::vector<DrugInfo> Drugs;
+};
+
+class City {
+public:
+    // Define the map with string as key and CityInfo as value
+    std::map<std::string, CityInfo> CitiesInfo;
+    Drug drugDatabase;
+
+    // Constructor
+    City() {
+        initializeCities();
+    }
+
+    // Function to initialize all cities with correct information
+    void initializeCities() {
+        std::vector<std::string> cityNames = {
+            "Acapulco, Mexico", "Amsterdam, Netherlands", "Bangkok, Thailand",
+            "Hong Kong, China", "Istanbul, Turkey", "Lisbon, Portugal",
+            "London, UK", "Marseilles, France", "Medellin, Colombia",
+            "Mexico City, Mexico", "Miami, USA", "Marrakesh, Morocco",
+            "New York City, USA", "Panama City, Panama", "Phuket, Thailand",
+            "San Francisco, USA", "Sydney, Australia", "Tehran, Iran",
+            "Tijuana, Mexico", "Toronto, Canada", "Vancouver, Canada"
+        };
+
+        std::vector<std::string> gunShopNames = {
+            "Aim High Ammunition Alley", "Ammo-nation", "Angry Hank's Shot Shack",
+            "Barrel of Laughs Gun Depot", "Bullet Bonanza Emporium", "Glock 'n Roll Firearms",
+            "Guns 'n' Giggles", "Laugh 'n' Load Gunsmiths", "Lock, Stock, and Two Smokin' Barrels",
+            "Pistol Puns & Rifled Laughs", "Shoots & Ladders Armoury", "The Bang Theory Firearms",
+            "The Bang-Bang Boutique", "The Trigger Happy Gun Shop", "Trigger Treats Gun Emporium"
+        };
+
+        for (const auto& cityName : cityNames) {
+            std::vector<DrugInfo> drugsAvailable;
+            std::vector<std::string> homeDrugNames;
+
+            // Pick two random drugs
+            for (int i = 0; i < 6; ++i) {
+                int randomIndex = std::rand() % drugDatabase.DrugsInfo.size();
+                auto it = drugDatabase.DrugsInfo.begin();
+                std::advance(it, randomIndex);
+                drugsAvailable.push_back(it->second);
+            }
+
+            for (int i = 0; i < 2; ++i) {
+                int randomIndex = std::rand() % drugDatabase.DrugsInfo.size();
+                auto it = drugDatabase.DrugsInfo.begin();
+                std::advance(it, randomIndex);
+                homeDrugNames.push_back(it->second.Name);
+            }
+
+            // Pick a random gun shop name
+            std::string gunShopName = gunShopNames[std::rand() % gunShopNames.size()];
+
+            CitiesInfo[cityName] = { cityName, cityName, 10, homeDrugNames, gunShopName, drugsAvailable };
+        }
+    }
+
+    // Function to access city information for a specific city name
+    void getCityInfo(const std::string& cityName) {
+        bool found = false;
+        for (const auto& city : CitiesInfo) {
+            std::size_t commaPos = city.first.find(", ");
+            if (commaPos != std::string::npos) {
+                std::string extractedCityName = city.first.substr(0, commaPos);
+                if (extractedCityName == cityName) {
+                    found = true;
+                    const CityInfo& cityInfo = city.second;
+                    std::cout << "City Name: " << cityInfo.FullName << std::endl;
+                    std::cout << "Max Drug Count: " << cityInfo.MaxDrugCount << std::endl;
+                    std::cout << "Home Drug Names: ";
+                    for (const auto& homeDrugName : cityInfo.HomeDrugNames) {
+                        std::cout << homeDrugName << ", ";
+                    }
+                    std::cout << std::endl;
+                    std::cout << "Gun Shop Name: " << cityInfo.GunShopName << std::endl;
+                    std::cout << "Drugs Available: " << std::endl;
+                    for (const auto& drug : cityInfo.Drugs) {
+                        std::cout << "  - " << drug.Name << std::endl;
+                    }
+                    std::cout << std::endl;
+                }
+            }
+        }
+        if (!found) {
+            std::cout << "City with name " << cityName << " not found." << std::endl;
+        }
+    }
 };
 
 int main() {
-    // Create an object of the Drug class
-    Drug drug;
-    std::string code;
-    // Accessing the information for a specific drug code
-    std::cout << "Enter the code of a drug: ";
-    std::cin >> code;
+    // Create an object of the City class
+    City cityDatabase;
+    std::string cityName;
 
-    drug.getDrugInfo(code);
+    // Accessing the information for a specific city name
+    std::cout << "Enter the name of a city: ";
+    std::getline(std::cin, cityName);
+    cityDatabase.getCityInfo(cityName);
 
     return 0;
 }
