@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <cstdlib>
 #include <ctime>
+#include <windows.h>
+#include <set>
 
 // Define a struct to hold drug information
 struct DrugInfo {
@@ -78,6 +80,10 @@ public:
                             "Derived from opium, morphine has been used for pain relief since the 19th century. It remains a powerful opioid analgesic.",
                             "Pain relief, euphoria, sedation.",
                             {50, 300} };
+        DrugsInfo["MP"] = { "Mephedrone", {"Meph", "Meow Meow", "Bubble"},
+                            "Mephedrone emerged as a popular recreational drug in the early 2000s. Initially marketed as a legal high and sold over the internet.",
+                            "Euphoria, enhanced sociability, and heightened sensory perception.",
+                            {30, 100} };
         DrugsInfo["MT"] = { "Meth", {"Crystal", "Ice", "Glass"},
                             "Methamphetamine, a potent stimulant, gained popularity for recreational use and as an illicit substance in the mid-20th century.",
                             "Increased energy, alertness, euphoria.",
@@ -114,46 +120,52 @@ public:
                             "Vicodin is a combination of hydrocodone and acetaminophen used for pain relief. It has been widely prescribed but is associated with the risk of addiction.",
                             "Pain relief, relaxation, mild euphoria.",
                             {100, 800} };
-        DrugsInfo["WD"] = { "Weed", {"Marijuana", "Cannabis", "Pot"},
-                            "Cannabis has been used for various purposes for thousands of years. It gained popularity for recreational use in the 20th century.",
-                            "Relaxation, euphoria, altered sensory perception.",
-                            {10, 100} };
-        DrugsInfo["XN"] = { "Xanax", {"Bars", "Benzos", "Zannies"},
-                            "Xanax, a benzodiazepine, is prescribed for anxiety. Its recreational use has become a concern due to the risk of dependence.",
-                            "Relaxation, sedation, anti-anxiety effects.",
-                            {50, 300} };
+        DrugsInfo["WD"] = { "Weed", {"Marijuana", "Pot", "Cannabis"},
+                            "Cannabis has been used for medicinal, recreational, and industrial purposes for thousands of years. Its use became widespread in the 20th century.",
+                            "Relaxation, euphoria, altered perception of time and space.",
+                            {5, 50} };
     }
 
-    // Function to access drug information for a specific drug code
-    void getDrugInfo(const std::string& code) {
-        system("cls");
-        if (DrugsInfo.find(code) != DrugsInfo.end()) {
-            DrugInfo drugInfo = DrugsInfo[code];
+    void PrintAllDrugs() const {
+        for (const auto& entry : DrugsInfo) {
+            std::cout << entry.first << ": " << entry.second.Name << std::endl;
+        }
+    }
+
+    void PrintSpecificDrug(const std::string& drugID) const {
+        auto it = DrugsInfo.find(drugID);
+        if (it != DrugsInfo.end()) {
+            const auto& drugInfo = it->second;
             std::cout << "Name: " << drugInfo.Name << std::endl;
             std::cout << "Street Names: ";
-            for (const auto& streetName : drugInfo.StreetNames) {
-                std::cout << streetName << ", ";
+            for (const auto& name : drugInfo.StreetNames) {
+                std::cout << name << ", ";
             }
             std::cout << std::endl;
             std::cout << "History: " << drugInfo.History << std::endl;
             std::cout << "Effects: " << drugInfo.Effects << std::endl;
-            std::cout << "Price Range: " << drugInfo.PriceRange.first << " - " << drugInfo.PriceRange.second << std::endl;
+            std::cout << "Price Range: $" << drugInfo.PriceRange.first << " - $" << drugInfo.PriceRange.second << std::endl;
         }
         else {
-            std::cout << "Drug with code " << code << " not found." << std::endl;
+            std::cout << "Drug not found." << std::endl;
         }
-    }
-
-    int getDrugPrice(const std::string& code) {
-        if (DrugsInfo.find(code) != DrugsInfo.end()) {
-            int minPrice = DrugsInfo[code].PriceRange.first;
-            int maxPrice = DrugsInfo[code].PriceRange.second;
-            // Generate a random price within the range
-            return rand() % (maxPrice - minPrice + 1) + minPrice;
-        }
-        return -1; // Indicate error
     }
 };
+
+// Function to add a random set of available drugs to each city
+void addAvailableDrugs(std::map<std::string, std::vector<std::string>>& cityDrugs, const std::vector<std::string>& drugKeys) {
+    std::srand(static_cast<unsigned int>(std::time(0)));
+    std::set<std::string> chosenDrugs;
+
+    while (chosenDrugs.size() < 6) {
+        int randomIndex = std::rand() % drugKeys.size();
+        chosenDrugs.insert(drugKeys[randomIndex]);
+    }
+
+    for (const auto& drug : chosenDrugs) {
+        cityDrugs[drug] = {};  // Initialize with empty vectors
+    }
+}
 
 // Define a struct to hold city information
 struct CityInfo {
@@ -201,11 +213,18 @@ public:
             std::vector<std::string> homeDrugNames;
 
             // Pick two random drugs
+            std::set<std::string> addedDrugs;
             for (int i = 0; i < 6; ++i) {
-                int randomIndex = std::rand() % drugDatabase.DrugsInfo.size();
-                auto it = drugDatabase.DrugsInfo.begin();
-                std::advance(it, randomIndex);
-                drugsAvailable.push_back(it->second);
+                while (true) {
+                    int randomIndex = std::rand() % drugDatabase.DrugsInfo.size();
+                    auto it = drugDatabase.DrugsInfo.begin();
+                    std::advance(it, randomIndex);
+                    if (addedDrugs.find(it->second.Name) == addedDrugs.end()) {  // Check if the drug is already added
+                        addedDrugs.insert(it->second.Name);  // Add the drug to the set
+                        drugsAvailable.push_back(it->second);
+                        break;
+                    }
+                }
             }
 
             for (int i = 0; i < 2; ++i) {
@@ -255,8 +274,10 @@ public:
 };
 
 int main() {
+    SetConsoleTitle("DrugWars");
     // Create an object of the City class
     City cityDatabase;
+
     std::string cityName;
 
     // Accessing the information for a specific city name
