@@ -9,6 +9,8 @@
 #include <set>
 #include <conio.h>
 
+void ShowMainMenu(Player&);
+
 // Define a struct to hold drug information
 struct DrugInfo {
     std::string Name;
@@ -334,7 +336,7 @@ public:
         Drugs = {};
         Guns = {};
         Clothing.push_back(getRandomClothing());
-        Pockets = 0;
+        Pockets = 100;
         GameDay = 1;
     }
 
@@ -382,7 +384,7 @@ public:
         for (const auto& item : Clothing) {
             std::cout << "- " << item << "\n" << std::endl;
         }
-        std::cout << "Pockets: " << 99 << " free pockets" << std::endl;
+        std::cout << "Pockets: " << Player::Pockets << " free pockets" << std::endl;
         std::cout << "Drugs: " << 0 << " total quantity" << std::endl;
         std::cout << "Guns: " << Guns.size() << " total guns" << std::endl;
         std::cout << "Game Day: " << GameDay << "" << std::endl;
@@ -418,7 +420,7 @@ void WriteCentered(const std::string& text, int width) {
 }
 
 void buyDrug() {
-
+    
 };
 
 void sellDrug() {
@@ -439,10 +441,77 @@ void drugOPedia() {
 
 void helpMenu() {
 
+    Player player;
+
+    system("cls");
+
+    std::cout << "                                                         ------\n";
+    std::cout << "                                                          Help\n";
+    std::cout << "                                                         ------\n\n";
+    std::cout << "            Drug Wars is a text-based game where you buy and sell drugs in various cities around the world.\n";
+    std::cout << "                             The goal is to make as much cash money as possible in 30 days.\n\n";
+    std::cout << "Main Menu\n";
+    std::cout << "---------\n";
+    std::cout << "[B]uy drugs\n";
+    std::cout << "[S]ell drugs\n";
+    std::cout << "[F]lush drugs\n";
+    std::cout << "[G]un shop\n";
+    std::cout << "[J]et to another city\n";
+    std::cout << "[D]rug-o-pedia\n";
+    std::cout << "[Q]uit\n\n";
+    std::cout << "Buy Drugs\n";
+    std::cout << "---------\n";
+    std::cout << "This displays the current prices of all drugs in the city you are in.\n";
+    std::cout << "Enter the name of the drug you want to buy, and the quantity you want to buy.\n";
+    std::cout << "You can only buy as much as you can afford, and as much as you have room for in your pockets.\n\n";
+    std::cout << "Sell Drugs\n";
+    std::cout << "----------\n";
+    std::cout << "This displays the current prices of all drugs in the city you are in.\n";
+    std::cout << "Enter the name of the drug you want to sell, and the quantity you want to sell.\n";
+    std::cout << "You can only sell as much as you have in your inventory.\n\n";
+    std::cout << "Flush Drugs\n";
+    std::cout << "-----------\n";
+    std::cout << "This displays the current drugs in your inventory.\n";
+    std::cout << "Enter the name of the drug you want to flush, and the quantity you want to flush.\n";
+    std::cout << "You can only flush as much as you have in your inventory.\n";
+    std::cout << "Flushing drugs is a good way to get rid of evidence and unmarketable drugs, and sometimes leads to a good time.\n\n";
+    std::cout << "Gun Shop\n";
+    std::cout << "--------\n";
+    std::cout << "This displays a list of guns you can buy.\n";
+    std::cout << "Buying a gun costs cash, and can help you in a fight.\n";
+    std::cout << "You can also sell your guns (at a discount, of course).\n";
+    std::cout << "You can only carry up to two guns at a time.\n";
+    std::cout << "There are only two gun stores in the game, in random cities.\n\n";
+    std::cout << "Jet to Another City\n";
+    std::cout << "-------------------\n";
+    std::cout << "This displays a list of cities you can travel to.\n";
+    std::cout << "Enter the number of the city you want to travel to.\n";
+    std::cout << "Traveling to another city takes a day, and costs some cash (don't get stuck!).\n\n";
+    std::cout << "Drug-o-pedia\n";
+    std::cout << "------------\n";
+    std::cout << "This displays detailed information about the drugs currently active in this game session.\n\n";
+    std::cout << "Quit\n";
+    std::cout << "----\n";
+    std::cout << "This exits the game.\n\n";
+    std::cout << "Random Events\n";
+    std::cout << "-------------\n";
+    std::cout << "Random events can occur at any time.\n";
+    std::cout << "Some are good, some are bad.\n\n";
+    std::cout << "                                                Press Enter to continue                                                  " << std::endl;
+
+     while (true) {
+        if (_getch() == 13) { // ASCII value for Enter key is 13
+            ShowMainMenu(player);
+        }
+    }
+}
+
+void developerMenu() {
+    std::cout << "Loading developer menu..." << std::endl;
 };
 
 void quitGame() {
-    std::cout << "Quitting the game. Goodbye!" << std::endl;
+    std::cout << "\nQuitting the game. Goodbye!" << std::endl;
     exit(0);
 }
 
@@ -488,6 +557,7 @@ char ShowMainMenu(Player& player) {
     std::cout << std::endl;
     std::cout << "[Q]uit" << std::endl;
     std::cout << "[?]Help" << std::endl;
+    std::cout << "[/]Developer" << std::endl;
     std::cout << std::endl;
     std::cout << "What now, boss? ";
 
@@ -503,57 +573,60 @@ char ShowMainMenu(Player& player) {
     //    std::cin >> choice;
     //}
 
-    char key = _getch(); // Read a single character without waiting for Enter
+    return 0;
+    
+}
+
+void checkKey() {
+
+    char key = _getch();
 
     switch (key) {
     case 'B':
     case 'b':
         std::cout << "You pressed B or b." << std::endl;
-        return key;
         break;
     case 'S':
     case 's':
         std::cout << "You pressed S or s." << std::endl;
-        return key;
         break;
     case 'F':
     case 'f':
         std::cout << "You pressed F or f." << std::endl;
-        return key;
         break;
     case 'J':
     case 'j':
         std::cout << "You pressed J or j." << std::endl;
-        return key;
         break;
     case 'Q':
     case 'q':
         quitGame();
-        return key;
         break;
     case '?':
-        std::cout << "You pressed ?." << std::endl;
-        return key;
+        helpMenu();
         break;
     case 'D':
     case 'd':
         std::cout << "You pressed D or d." << std::endl;
-        return key;
+        break;
+    case '/':
+        developerMenu();
         break;
     default:
-        std::cout << "You pressed an invalid key." << std::endl;
-        return key;
         break;
     }
 }
 
 int main() {
+    SetConsoleTitle("DrugWarsCPP");
+
     Player player;
     player.city;
 
-    ;
-
     ShowMainMenu(player);
+    while (true) {
+        checkKey();
+    }
     
 
     // Handle user choice
