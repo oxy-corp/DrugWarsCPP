@@ -7,6 +7,7 @@
 #include <ctime>
 #include <windows.h>
 #include <set>
+#include <conio.h>
 
 // Define a struct to hold drug information
 struct DrugInfo {
@@ -416,6 +417,35 @@ void WriteCentered(const std::string& text, int width) {
     std::cout << std::endl;
 }
 
+void buyDrug() {
+
+};
+
+void sellDrug() {
+
+};
+
+void flushDrug() {
+
+};
+
+void jetCity() {
+
+};
+
+void drugOPedia() {
+
+};
+
+void helpMenu() {
+
+};
+
+void quitGame() {
+    std::cout << "Quitting the game. Goodbye!" << std::endl;
+    exit(0);
+}
+
 char ShowMainMenu(Player& player) {
 
     std::cout << std::endl;
@@ -443,7 +473,7 @@ char ShowMainMenu(Player& player) {
     std::cout << std::endl;
 
     // Display menu options
-    std::cout << "[B]uy drugs" << std::endl;
+    std::cout << "[B]uy drugs" << std::endl; 
     std::cout << "[S]ell drugs" << std::endl;
     std::cout << "[F]lush drugs" << std::endl;
     std::cout << std::endl;
@@ -462,30 +492,58 @@ char ShowMainMenu(Player& player) {
     std::cout << "What now, boss? ";
 
     // Wait for user input
-    char choice;
-    std::vector<char> choices = { 'B', 'S', 'F', 'J', 'Q', '?', 'D' };
+    //char choice;
+    //std::vector<char> choices = { 'B', 'S', 'F', 'J', 'Q', '?', 'D' };
     //if (player.HasGunShop()) {
     //    choices.push_back('G');
     //}
-    std::cin >> choice;
+    //std::cin >> choice;
 
-    while (std::find(choices.begin(), choices.end(), choice) == choices.end()) {
-        std::cin >> choice;
-    }
+    //while (std::find(choices.begin(), choices.end(), choice) == choices.end()) {
+    //    std::cin >> choice;
+    //}
 
-    return choice;
-}
+    char key = _getch(); // Read a single character without waiting for Enter
 
-void messageLoop() {
-    MSG msg;
-    while (GetMessage(&msg, NULL, 0, 0)) {
-        if (msg.message == WM_KEYDOWN) {
-            int keyCode = static_cast<int>(msg.wParam);
-            // Handle the key press, keyCode contains the key code
-            std::cout << "Key pressed: " << keyCode << std::endl;
-        }
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
+    switch (key) {
+    case 'B':
+    case 'b':
+        std::cout << "You pressed B or b." << std::endl;
+        return key;
+        break;
+    case 'S':
+    case 's':
+        std::cout << "You pressed S or s." << std::endl;
+        return key;
+        break;
+    case 'F':
+    case 'f':
+        std::cout << "You pressed F or f." << std::endl;
+        return key;
+        break;
+    case 'J':
+    case 'j':
+        std::cout << "You pressed J or j." << std::endl;
+        return key;
+        break;
+    case 'Q':
+    case 'q':
+        quitGame();
+        return key;
+        break;
+    case '?':
+        std::cout << "You pressed ?." << std::endl;
+        return key;
+        break;
+    case 'D':
+    case 'd':
+        std::cout << "You pressed D or d." << std::endl;
+        return key;
+        break;
+    default:
+        std::cout << "You pressed an invalid key." << std::endl;
+        return key;
+        break;
     }
 }
 
@@ -493,9 +551,9 @@ int main() {
     Player player;
     player.city;
 
-    // messageLoop();
+    ;
 
-    char userChoice = ShowMainMenu(player);
+    ShowMainMenu(player);
     
 
     // Handle user choice
