@@ -19,6 +19,14 @@ struct DrugInfo {
 
 class Drug {
 public:
+
+    std::string Name;
+    std::string Code;
+    std::string Description;
+    int BasePrice;
+    std::vector<int> PriceRange;
+    float PriceMultiplier;
+    int Quantity;
     // Define the map with string as key and DrugInfo as value
     std::map<std::string, DrugInfo> DrugsInfo;
 
@@ -273,17 +281,225 @@ public:
     }
 };
 
+class Gun {
+public:
+    std::string Name;
+    std::string Type;
+    int Price;
+    int StoppingPower;
+    std::string Description;
+    std::string History;
+
+    Gun(std::string name, std::string type, int price, int stoppingPower, std::string description, std::string history) {
+        Name = name;
+        Type = type;
+        Price = price;
+        StoppingPower = stoppingPower;
+        Description = description;
+        History = history;
+    }
+};
+
+class Player {
+private:
+    
+
+public:
+
+    std::vector<std::string> Clothing;
+    City city;
+    int Cash;
+    std::vector<Drug> Drugs;
+    int GameDay;
+    std::vector<Gun> Guns;
+    std::string Initials;
+    int Pockets;
+
+    std::vector<std::string> starterClothes = {
+        "Bell-bottom pants",
+        "Flannel shirt (buttoned Cholo-style)",
+        "\"I'm with Stupid ->\" T-shirt",
+        "Over-sized athletic jersey",
+        "Pink Floyd T-shirt",
+        "Smelly socks",
+        "Smelly socks with a hole in them",
+        "Terry-cloth bath robe",
+        "Underwear, hanging out",
+        "Velour track suit",
+        "Wife-beater"
+    };
+
+    Player() {
+        Drugs = {};
+        Guns = {};
+        Clothing.push_back(getRandomClothing());
+        Pockets = 0;
+        GameDay = 1;
+    }
+
+    int getFreePocketCount() {
+        int totalQuantity = getDrugCount();
+        return Pockets - totalQuantity;
+    }
+
+    int getDrugCount() {
+        int totalQuantity = 0;
+        for (auto drug : Drugs) {
+            totalQuantity += drug.Quantity;
+        }
+        return totalQuantity;
+    }
+
+    std::vector<Gun> getGuns() {
+        return Guns;
+    }
+
+    void dumpGuns() {
+        Guns.clear();
+    }
+
+    bool addGun(Gun gun) {
+        if (Guns.size() >= 2) {
+            // Handle message for too many guns
+            return false;
+        }
+        Guns.push_back(gun);
+        return true;
+    }
+
+    bool addGun(Gun gun, bool silent) {
+        // Implement addGun method with silent parameter
+        return false;
+    }
+
+    // Implement other methods...
+
+    void displayPlayer() const {
+        std::cout << "Player Information:" << std::endl;
+        std::cout << "-------------------\n" << std::endl;
+        std::cout << "Clothing:\n" << std::endl;
+        for (const auto& item : Clothing) {
+            std::cout << "- " << item << "\n" << std::endl;
+        }
+        std::cout << "Pockets: " << 99 << " free pockets" << std::endl;
+        std::cout << "Drugs: " << 0 << " total quantity" << std::endl;
+        std::cout << "Guns: " << Guns.size() << " total guns" << std::endl;
+        std::cout << "Game Day: " << GameDay << "" << std::endl;
+    }
+
+private:
+    std::string getRandomClothing() {
+        std::srand(static_cast<unsigned int>(std::time(0)));
+        int randomIndex = std::rand() % starterClothes.size();
+        return starterClothes[randomIndex];
+    };
+};
+
+void WriteCentered(const std::string& text, int width) {
+    int padding = width - text.length();
+    int leftPadding = padding / 2;
+    int rightPadding = padding - leftPadding;
+
+    // Print left padding
+    for (int i = 0; i < leftPadding; ++i) {
+        std::cout << " ";
+    }
+
+    // Print text
+    std::cout << text;
+
+    // Print right padding
+    for (int i = 0; i < rightPadding; ++i) {
+        std::cout << " ";
+    }
+
+    std::cout << std::endl;
+}
+
+char ShowMainMenu(Player& player) {
+
+    std::cout << std::endl;
+
+    // Display Inventory
+    int columnWidth = 40;
+
+    std::vector<std::string> gunEntries;
+
+    std::vector<std::string> otherInventory = {"Bell-Bottom Pants"};
+    otherInventory.insert(otherInventory.end(), gunEntries.begin(), gunEntries.end());
+
+    WriteCentered("Your drugs:", columnWidth);
+    WriteCentered("Other Inventory:", columnWidth);
+
+    int maxCount = (player.Drugs.size() > otherInventory.size()) ? player.Drugs.size() : otherInventory.size();
+
+    for (int i = 0; i < maxCount; ++i) {
+        std::string dispDrug = "· You have 0 marijuanas.";
+        std::string dispOtherInventory = (i < otherInventory.size()) ? "· " + otherInventory[i] : (i == 0) ? "· You are naked." : "";
+        WriteCentered(dispDrug, columnWidth);
+        WriteCentered(dispOtherInventory, columnWidth);
+    }
+
+    std::cout << std::endl;
+
+    // Display menu options
+    std::cout << "[B]uy drugs" << std::endl;
+    std::cout << "[S]ell drugs" << std::endl;
+    std::cout << "[F]lush drugs" << std::endl;
+    std::cout << std::endl;
+
+    //if (player.HasGunShop()) {
+    //    std::cout << "[G]un shop" << std::endl;
+    //    std::cout << std::endl;
+    //}
+
+    std::cout << "[J]et to another city" << std::endl;
+    std::cout << "[D]rug-o-pedia" << std::endl;
+    std::cout << std::endl;
+    std::cout << "[Q]uit" << std::endl;
+    std::cout << "[?]Help" << std::endl;
+    std::cout << std::endl;
+    std::cout << "What now, boss? ";
+
+    // Wait for user input
+    char choice;
+    std::vector<char> choices = { 'B', 'S', 'F', 'J', 'Q', '?', 'D' };
+    //if (player.HasGunShop()) {
+    //    choices.push_back('G');
+    //}
+    std::cin >> choice;
+
+    while (std::find(choices.begin(), choices.end(), choice) == choices.end()) {
+        std::cin >> choice;
+    }
+
+    return choice;
+}
+
+void messageLoop() {
+    MSG msg;
+    while (GetMessage(&msg, NULL, 0, 0)) {
+        if (msg.message == WM_KEYDOWN) {
+            int keyCode = static_cast<int>(msg.wParam);
+            // Handle the key press, keyCode contains the key code
+            std::cout << "Key pressed: " << keyCode << std::endl;
+        }
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+}
+
 int main() {
-    SetConsoleTitle("DrugWars");
-    // Create an object of the City class
-    City cityDatabase;
+    Player player;
+    player.city;
 
-    std::string cityName;
+    // messageLoop();
 
-    // Accessing the information for a specific city name
-    std::cout << "Enter the name of a city: ";
-    std::getline(std::cin, cityName);
-    cityDatabase.getCityInfo(cityName);
+    char userChoice = ShowMainMenu(player);
+    
+
+    // Handle user choice
 
     return 0;
 }
+ 
