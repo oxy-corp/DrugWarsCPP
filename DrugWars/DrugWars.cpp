@@ -9,8 +9,6 @@
 #include <set>
 #include <conio.h>
 
-void ShowMainMenu(Player&);
-
 // Define a struct to hold drug information
 struct DrugInfo {
     std::string Name;
@@ -483,7 +481,7 @@ char ShowMainMenu(Player& player) {
 }
 
 void buyDrug() {
-    
+    std::cout << "Available Drugs: " << std::endl;
 };
 
 void sellDrug() {
