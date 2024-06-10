@@ -8,6 +8,7 @@
 #include <windows.h>
 #include <set>
 #include <conio.h>
+#include <random>
 
 // Define a struct to hold drug information
 struct DrugInfo {
@@ -162,12 +163,13 @@ public:
 };
 
 // Function to add a random set of available drugs to each city
-void addAvailableDrugs(std::map<std::string, std::vector<std::string>>& cityDrugs, const std::vector<std::string>& drugKeys) {
-    std::srand(static_cast<unsigned int>(std::time(0)));
+addAvailableDrugs(std::map<std::string, std::vector<std::string>>& cityDrugs, const std::vector<std::string>& drugKeys) {
+    std::random_device rd;
     std::set<std::string> chosenDrugs;
+    std::uniform_int_distribution<int> dist(0, drugKeys.size() - 1);
 
     while (chosenDrugs.size() < 6) {
-        int randomIndex = std::rand() % drugKeys.size();
+        int randomIndex = dist(rd);
         chosenDrugs.insert(drugKeys[randomIndex]);
     }
 
