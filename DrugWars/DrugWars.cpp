@@ -363,6 +363,7 @@ public:
     bool addGun(Gun gun) {
         if (Guns.size() >= 2) {
             // Handle message for too many guns
+            std::cout << "Hey man! You can't hold " << Guns.size() << " guns, the cops are gonna get ya!" << std::endl;
             return false;
         }
         Guns.push_back(gun);
