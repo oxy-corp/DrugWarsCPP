@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <map>
 #include <string>
 #include <vector>
@@ -419,6 +419,68 @@ void WriteCentered(const std::string& text, int width) {
     std::cout << std::endl;
 }
 
+char ShowMainMenu(Player& player) {
+
+    std::cout << std::endl;
+
+    // Display Inventory
+    int columnWidth = 40;
+
+    std::vector<std::string> gunEntries;
+
+    std::vector<std::string> otherInventory = {"Bell-Bottom Pants"};
+    otherInventory.insert(otherInventory.end(), gunEntries.begin(), gunEntries.end());
+
+    WriteCentered("Your drugs:", columnWidth);
+    WriteCentered("Other Inventory:", columnWidth);
+
+    int maxCount = (player.Drugs.size() > otherInventory.size()) ? player.Drugs.size() : otherInventory.size();
+
+    for (int i = 0; i < maxCount; ++i) {
+        std::string dispDrug = "· You have 0 marijuanas.";
+        std::string dispOtherInventory = (i < otherInventory.size()) ? "· " + otherInventory[i] : (i == 0) ? "· You are naked." : "";
+        WriteCentered(dispDrug, columnWidth);
+        WriteCentered(dispOtherInventory, columnWidth);
+    }
+
+    std::cout << std::endl;
+
+    // Display menu options
+    std::cout << "[B]uy drugs" << std::endl; 
+    std::cout << "[S]ell drugs" << std::endl;
+    std::cout << "[F]lush drugs" << std::endl;
+    std::cout << std::endl;
+
+    //if (player.HasGunShop()) {
+    //    std::cout << "[G]un shop" << std::endl;
+    //    std::cout << std::endl;
+    //}
+
+    std::cout << "[J]et to another city" << std::endl;
+    std::cout << "[D]rug-o-pedia" << std::endl;
+    std::cout << std::endl;
+    std::cout << "[Q]uit" << std::endl;
+    std::cout << "[?]Help" << std::endl;
+    std::cout << "[/]Developer" << std::endl;
+    std::cout << std::endl;
+    std::cout << "What now, boss? ";
+
+    // Wait for user input
+    //char choice;
+    //std::vector<char> choices = { 'B', 'S', 'F', 'J', 'Q', '?', 'D' };
+    //if (player.HasGunShop()) {
+    //    choices.push_back('G');
+    //}
+    //std::cin >> choice;
+
+    //while (std::find(choices.begin(), choices.end(), choice) == choices.end()) {
+    //    std::cin >> choice;
+    //}
+
+    return 0;
+    
+}
+
 void buyDrug() {
     
 };
@@ -513,68 +575,6 @@ void developerMenu() {
 void quitGame() {
     std::cout << "\nQuitting the game. Goodbye!" << std::endl;
     exit(0);
-}
-
-char ShowMainMenu(Player& player) {
-
-    std::cout << std::endl;
-
-    // Display Inventory
-    int columnWidth = 40;
-
-    std::vector<std::string> gunEntries;
-
-    std::vector<std::string> otherInventory = {"Bell-Bottom Pants"};
-    otherInventory.insert(otherInventory.end(), gunEntries.begin(), gunEntries.end());
-
-    WriteCentered("Your drugs:", columnWidth);
-    WriteCentered("Other Inventory:", columnWidth);
-
-    int maxCount = (player.Drugs.size() > otherInventory.size()) ? player.Drugs.size() : otherInventory.size();
-
-    for (int i = 0; i < maxCount; ++i) {
-        std::string dispDrug = "· You have 0 marijuanas.";
-        std::string dispOtherInventory = (i < otherInventory.size()) ? "· " + otherInventory[i] : (i == 0) ? "· You are naked." : "";
-        WriteCentered(dispDrug, columnWidth);
-        WriteCentered(dispOtherInventory, columnWidth);
-    }
-
-    std::cout << std::endl;
-
-    // Display menu options
-    std::cout << "[B]uy drugs" << std::endl; 
-    std::cout << "[S]ell drugs" << std::endl;
-    std::cout << "[F]lush drugs" << std::endl;
-    std::cout << std::endl;
-
-    //if (player.HasGunShop()) {
-    //    std::cout << "[G]un shop" << std::endl;
-    //    std::cout << std::endl;
-    //}
-
-    std::cout << "[J]et to another city" << std::endl;
-    std::cout << "[D]rug-o-pedia" << std::endl;
-    std::cout << std::endl;
-    std::cout << "[Q]uit" << std::endl;
-    std::cout << "[?]Help" << std::endl;
-    std::cout << "[/]Developer" << std::endl;
-    std::cout << std::endl;
-    std::cout << "What now, boss? ";
-
-    // Wait for user input
-    //char choice;
-    //std::vector<char> choices = { 'B', 'S', 'F', 'J', 'Q', '?', 'D' };
-    //if (player.HasGunShop()) {
-    //    choices.push_back('G');
-    //}
-    //std::cin >> choice;
-
-    //while (std::find(choices.begin(), choices.end(), choice) == choices.end()) {
-    //    std::cin >> choice;
-    //}
-
-    return 0;
-    
 }
 
 void checkKey() {
