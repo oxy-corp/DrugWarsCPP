@@ -338,6 +338,7 @@ public:
         Clothing.push_back(getRandomClothing());
         Pockets = 100;
         GameDay = 1;
+        Cash = 2000
     }
 
     int getFreePocketCount() {
