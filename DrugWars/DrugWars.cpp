@@ -484,7 +484,8 @@ char ShowMainMenu(Player& player) {
 }
 
 void buyDrug() {
-    std::cout << "Available Drugs: " << std::endl;
+    std::cout << "Cash: " << Player::Cash << std::endl;
+    // implement cash handling system
 };
 
 void sellDrug() {
